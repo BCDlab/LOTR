@@ -29,10 +29,10 @@
 ######################
 
 # import statements
-from openpyxl import load_workbook()
+from openpyxl import load_workbook
 
 # where to read and write the excel files
-read_location = 'C:/Users/Jim/Desktop/'
+read_location = 'C:/Users/Jim/Code/LOTR/'
 write_location = read_location
 
 # name of the workbook to be read
@@ -47,7 +47,7 @@ number_of_birds = 24
 ###  Execution
 ######################
 
-# bird_workbook = load_workbook('{0}{1}'.format(read_location, bird_workbook_name))
+bird_workbook = load_workbook('{0}{1}'.format(read_location, bird_workbook_name))
 
 bird_worksheet = workbook.active
 
