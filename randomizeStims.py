@@ -97,8 +97,9 @@ while len(pair_list) < number_of_birds:
 
 	if pair_list[pair_count - 1][0] != random_a_bird[0] and random_a_bird != random_b_bird and current_pair not in pair_list: 
 	    pair_list.append((current_pair[0], current_pair[1]))
-	else:
-	    print 'Match invalid; repeating randomization'
+	# else:
+	    # print 'Match invalid; repeating random pairing
+
 
 #      -No two "species" should be paired together - Done
 #      -Don't want colors to be the same
@@ -142,3 +143,7 @@ while len(pair_list) > 1:
 	row_count += 1
 
 output_bird_workbook.save('{0}output.xlsx'.format(write_location))
+
+# finished, exit successfully
+
+print 'Finished; exit code 0'
