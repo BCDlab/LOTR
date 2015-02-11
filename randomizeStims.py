@@ -34,7 +34,7 @@ from openpyxl import load_workbook
 from random import randint
 
 # where to read and write the excel files
-read_location = 'C:/Users/Jim/Code/LOTR/Stimuli/'
+read_location = 'C:/Users/Jim/Code/BCD/LOTR/Stimuli/'
 write_location = read_location
 
 # name of the workbook to be read
@@ -45,6 +45,8 @@ number_of_birds = 24
 
 bird_workbook = load_workbook('{0}{1}'.format(read_location, bird_workbook_name))
 bird_ws = bird_workbook.active
+
+output_bird_workbook = load_workbook('{0}birdOutputTemplate.xlsx'.format(read_location))
 
 #################################################################
 
@@ -81,25 +83,24 @@ while random_left_bird_1[4].value == random_right_bird_1[4].value or random_left
 
 pair_list.append((random_left_bird_1, random_right_bird_1))
 
-print pair_list
+# print pair_list
 
 pair_count += 1
 
 # iterate to get the rest of the stimuli
 
+while len(pair_list) < number_of_birds:
+	random_a_bird = bird_list[randint(0, len(bird_list) - 1)]
+	random_b_bird = bird_list[randint(0, len(bird_list) - 1)]
 
-# while len(pair_list) < number_of_birds:
-random_a_bird = bird_list[randint(0, len(bird_list) - 1)]
-randob_b_bird = bird_list[randint(0, len(bird_list) - 1)]
-if pair_list[pair_count - 1][0] != random_a_bird[0]: 
-    print '1'
-else:
-    print '2'
+	current_pair = [random_a_bird, random_b_bird]
 
+	if pair_list[pair_count - 1][0] != random_a_bird[0] and random_a_bird != random_b_bird and current_pair not in pair_list: 
+	    pair_list.append((current_pair[0], current_pair[1]))
+	else:
+	    print 'Match invalid; repeating randomization'
 
-
-
-#      -No two "species" should be paired together
+#      -No two "species" should be paired together - Done
 #      -Don't want colors to be the same
 #      -Once pairing has happened, it shouldn't happen again
 
@@ -109,4 +110,35 @@ else:
 ###  Save Data
 ######################
 
-# bird_workbook.save('{0}test.xlsx'.format(write_location))
+# write pairings to new file using a template
+
+ws = output_bird_workbook.active
+
+# start at the second row
+row_count = 2
+
+while len(pair_list) > 1:
+	cell_range_left  = ws['A{0}:E{0}'.format(row_count)]
+	cell_range_right = ws['F{0}:J{0}'.format(row_count)]
+
+	current_pair = pair_list.pop(0)
+
+	column_count = 0
+
+	for row in cell_range_left:
+		for cell in row:
+			# print cell.value
+			cell.value = current_pair[0][column_count].value
+			column_count += 1
+
+	column_count = 0
+
+	for row in cell_range_right:
+		for cell in row:
+			# print cell.value
+			cell.value = current_pair[1][column_count].value
+			column_count += 1
+
+	row_count += 1
+
+output_bird_workbook.save('{0}output.xlsx'.format(write_location))
